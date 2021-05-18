@@ -1,3 +1,4 @@
+# Specify a memory request and a memory limit
 apiVersion: v1
 kind: Pod
 metadata:
@@ -16,6 +17,7 @@ spec:
     args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
 
 ---
+# Exceed a Container's memory limit 
 apiVersion: v1
 kind: Pod
 metadata:
@@ -34,6 +36,7 @@ spec:
     args: ["--vm", "1", "--vm-bytes", "250M", "--vm-hang", "1"]
 
 ---
+# Specify a memory request that is too big for your Nodes
 apiVersion: v1
 kind: Pod
 metadata:
