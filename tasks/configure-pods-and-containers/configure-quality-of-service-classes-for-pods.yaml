@@ -1,0 +1,71 @@
+# QoS classes
+# When Kubernetes creates a Pod it assigns one of these QoS classes to the Pod:
+# - Guaranteed - all pods must have resources cpu and memory configured(both limit and requests) set
+# - Burstable - doesnt meet qos guaranteed condition and at least one container has a memory or cpu request
+# - BestEffort - Containers in the Pod must not have any memory or CPU limits or requests.
+
+# Create a Pod that gets assigned a QoS class of Guaranteed
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qos-demo
+  namespace: tasks
+spec:
+  containers:
+  - name: qos-demo-ctr
+    image: nginx
+    resources:
+      limits:
+        memory: "100Mi"
+        cpu: "100m"
+      requests:
+        memory: "100Mi"
+        cpu: "100m"
+
+# Note: If a Container specifies its own memory limit, but does not specify a memory request, Kubernetes automatically assigns a memory request that matches the limit. 
+# Similarly, if a Container specifies its own CPU limit, but does not specify a CPU request, Kubernetes automatically assigns a CPU request that matches the limit.
+
+---
+# Create a Pod that gets assigned a QoS class of Burstable 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qos-demo-2
+  namespace: tasks
+spec:
+  containers:
+  - name: qos-demo-2-ctr
+    image: nginx
+    resources:
+      limits:
+        memory: "90Mi"
+      requests:
+        memory: "70Mi"
+---
+# Create a Pod that gets assigned a QoS class of BestEffort
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qos-demo-3
+  namespace: tasks
+spec:
+  containers:
+  - name: qos-demo-3-ctr
+    image: nginx
+
+---
+# Create a Pod that has two Containers
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qos-demo-4
+  namespace: tasks
+spec:
+  containers:
+  - name: qos-demo-4-ctr-1
+    image: nginx
+    resources:
+      requests:
+        memory: "200Mi"
+  - name: qos-demo-4-ctr-2
+    image: redis
