@@ -1,0 +1,47 @@
+# Schedule a Pod using required node affinity
+# This manifest describes a Pod that has a requiredDuringSchedulingIgnoredDuringExecution node affinity,disktype: ssd. 
+# This means that the pod will get scheduled only on a node that has a disktype=ssd label.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  namespace: tasks
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: disktype
+            operator: In
+            values:
+            - ssd            
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+
+---
+# Schedule a Pod using preferred node affinity
+# This manifest describes a Pod that has a preferredDuringSchedulingIgnoredDuringExecution node affinity,disktype: ssd. 
+# This means that the pod will prefer a node that has a disktype=ssd label.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx2
+  namespace: tasks
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: disktype
+            operator: In
+            values:
+            - ssd          
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent

@@ -1,0 +1,31 @@
+# Create a pod that gets scheduled to your chosen node
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+  namespace: tasks
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  nodeSelector:
+    disktype: ssd
+
+---
+
+# Create a pod that gets scheduled to specific node
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx2
+  namespace: tasks
+spec:
+  nodeName: pool-pnkmkikhl-8rk3o # schedule pod to specific node
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
